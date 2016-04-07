@@ -10,7 +10,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 app.get('/', function(req, res) {
-  fs.readFile('../build/TestHelloWorld.js', function(err, data){
+  fs.readFile('../build/Main.js', function(err, data){
     if (err) {
       res.send("oh noes");
       return console.log(err);
@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
   });
 });
 
-app.get('/api/users/colin', function(req, res) {
+app.get('/api/users/:name', function(req, res) {
   db.all("SELECT * FROM data", function(err, rows){
     if (err) return res.json("oh noes");
     res.json(_.map(rows, function(x){
