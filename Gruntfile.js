@@ -16,6 +16,15 @@ module.exports = function(grunt) {
         ],
       }
     },
+    watch: {
+      elm: {
+        files: ['**/*.elm'],
+        tasks: ['elm']
+      }
+    },
   });
   grunt.loadNpmTasks('grunt-elm');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
+  grunt.registerTask('default',['elm']);
 };
