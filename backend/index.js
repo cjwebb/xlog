@@ -1,10 +1,9 @@
 var express = require('express');
 var exphbs = require('express-handlebars');
 var fs = require('fs');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('../db.sqlite3');
 var app = express();
-var _ = require('lodash');
+
+var db = require('./db.js');
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
@@ -25,16 +24,19 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/users/:name', function(req, res) {
-  db.all("SELECT * FROM data", function(err, rows){
-    if (err) return res.json("oh noes");
-    res.json(_.map(rows, function(x){
-      x.data = JSON.parse(x.data);
-      return x;
-    }));
+  // todo - sanitize :name
+  db.getUserLog(req.name, function(err, data) {
+    if (err) {
+      console.log(err);
+      return res.json("oh noes");
+    }
+    res.json(data);
   });
 });
 
-app.listen(3000, function() {
-  console.log('Listening on port 3000');
+db.initializeDatabase(function() {
+  app.listen(3000, function() {
+    console.log('Listening on port 3000');
+  });
 });
 
