@@ -2,11 +2,19 @@ var express = require('express');
 var exphbs = require('express-handlebars');
 var fs = require('fs');
 var app = express();
-
+var jwt = require('express-jwt');
 var db = require('./db.js');
+
+var jwtCheck = jwt({
+  // todo - read from environment
+  secret: new Buffer('YOUR_CLIENT_SECRET', 'base64'),
+  audience: 'YOUR_CLIENT_ID'
+});
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
+
+// ---- HTML Routes ----
 
 app.get('/', function(req, res) {
   fs.readFile('../build/Main.js', function(err, data){
@@ -23,6 +31,9 @@ app.get('/', function(req, res) {
   });
 });
 
+// ---- API Routes ----
+app.use('/api/users', jwtCheck);
+
 app.get('/api/users/:name', function(req, res) {
   // todo - sanitize :name
   db.getUserLog(req.name, function(err, data) {
@@ -34,6 +45,7 @@ app.get('/api/users/:name', function(req, res) {
   });
 });
 
+// ---- Initialise App ----
 db.initializeDatabase(function() {
   app.listen(3000, function() {
     console.log('Listening on port 3000');
