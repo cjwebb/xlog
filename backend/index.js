@@ -1,14 +1,16 @@
+"use strict"
+
 var express = require('express');
 var exphbs = require('express-handlebars');
 var fs = require('fs');
 var app = express();
 var jwt = require('express-jwt');
 var db = require('./db.js');
+var config = require('./config.js');
 
 var jwtCheck = jwt({
-  // todo - read from environment
-  secret: new Buffer('YOUR_CLIENT_SECRET', 'base64'),
-  audience: 'YOUR_CLIENT_ID'
+  secret: new Buffer(config.authSecret, 'base64'),
+  audience: config.authId
 });
 
 app.engine('handlebars', exphbs());
@@ -33,6 +35,11 @@ app.get('/', function(req, res) {
 
 // ---- API Routes ----
 app.use('/api/users', jwtCheck);
+app.use('/api/users', function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ error: 'InvalidAuthToken' });
+  }
+});
 
 app.get('/api/users/:name', function(req, res) {
   // todo - sanitize :name
