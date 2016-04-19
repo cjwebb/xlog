@@ -2,8 +2,8 @@
 
 var express = require('express');
 var exphbs = require('express-handlebars');
-var fs = require('fs');
 var app = express();
+var gzip = require('compression');
 var jwt = require('express-jwt');
 var db = require('./db.js');
 var config = require('./config.js');
@@ -13,24 +13,20 @@ var jwtCheck = jwt({
   audience: config.authId
 });
 
+app.use(gzip());
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
+app.use('/static', express.static(__dirname + '/../build'));
 
 // ---- HTML Routes ----
 
 app.get('/', function(req, res) {
-  fs.readFile('../build/Main.js', function(err, data){
-    if (err) {
-      res.send("oh noes");
-      return console.log(err);
-    }
-    var payload = [
-      { name: "Alice", age: 31 },
-      { name: "Bob", age: 33 },
-      { name: "Charlie", age: 26 }
-    ]
-    res.render('home', { elm: data, payload: JSON.stringify(payload) });
-  });
+  var payload = [
+    { name: "Alice", age: 31 },
+    { name: "Bob", age: 33 },
+    { name: "Charlie", age: 26 }
+  ]
+  res.render('home', { payload: JSON.stringify(payload) });
 });
 
 // ---- API Routes ----
