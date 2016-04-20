@@ -1,10 +1,20 @@
 import DataRowList exposing (init, update, view)
-import StartApp.Simple exposing (start)
+import StartApp
+import Task
+import Effects exposing (Never)
 
-main =
-  start
-    { model = init "Hello"
+app =
+  StartApp.start
+    { init = init "Hello"
     , update = update
     , view = view
+    , inputs = []
     }
+
+main =
+  app.html
+
+port tasks : Signal (Task.Task Never ())
+port tasks =
+  app.tasks
 

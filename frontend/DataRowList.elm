@@ -1,6 +1,7 @@
 module DataRowList where
 
 import DataRow
+import Effects exposing (Effects, Never)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -13,20 +14,22 @@ type alias Model =
 
 type alias ID = Int
 
-init : String -> Model
+init : String -> (Model, Effects Action)
 init name =
-  { rows = [ (0, name) ]
-  , nextID = 1
-  }
+  ({ rows = [ (0, name) ], nextID = 1 }
+  , Effects.none
+  )
 
 -- Update
 type Action = Remove ID
 
-update : Action -> Model -> Model
+update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
     Remove id ->
-      { model | rows = List.filter (\(rowID, _) -> rowID /= id) model.rows }
+      ({ model | rows = List.filter (\(rowID, _) -> rowID /= id) model.rows }
+      , Effects.none
+      )
 
 -- View
 view : Signal.Address Action -> Model -> Html
