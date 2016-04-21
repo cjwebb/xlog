@@ -31,7 +31,7 @@ countStyle =
     [ ("font-size", "20px")
     , ("font-family", "monospace")
     , ("display", "inline-block")
-    , ("width", "100px")
+    , ("width", "130px")
     , ("text-align", "center")
     ]
 

@@ -5,7 +5,7 @@ import Effects exposing (Never)
 
 app =
   StartApp.start
-    { init = init "Hello"
+    { init = init
     , update = update
     , view = view
     , inputs = []

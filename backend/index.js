@@ -21,15 +21,19 @@ app.use('/static', express.static(__dirname + '/../build'));
 // ---- HTML Routes ----
 
 app.get('/', function(req, res) {
-  var payload = [
-    { name: "Alice", age: 31 },
-    { name: "Bob", age: 33 },
-    { name: "Charlie", age: 26 }
-  ]
-  res.render('home', { payload: JSON.stringify(payload) });
+  res.render('home');
 });
 
 // ---- API Routes ----
+app.get('/api/datatypes', function(req, res) {
+  var payload = [
+    "Alice",
+    "Bob",
+    "Charlie"
+  ]
+  res.json(payload);
+});
+
 app.use('/api/users', jwtCheck);
 app.use('/api/users', function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
