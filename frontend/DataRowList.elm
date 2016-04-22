@@ -42,7 +42,10 @@ update action model =
 
 zipWithIndex : List a -> List (Int, a)
 zipWithIndex list =
-  List.map (\x -> (0, x)) list -- todo : actually increment the index.
+  let
+    indexes = [0 .. List.length list]
+  in
+    List.map2 (,) indexes list
 
 -- View
 view : Signal.Address Action -> Model -> Html
