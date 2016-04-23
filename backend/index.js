@@ -21,7 +21,8 @@ app.use('/static', express.static(__dirname + '/../build'));
 // ---- HTML Routes ----
 
 app.get('/', function(req, res) {
-  res.render('home');
+  var authConfig = { authId: config.authId, authDomain: config.authDomain };
+  res.render('home', authConfig);
 });
 
 // ---- API Routes ----

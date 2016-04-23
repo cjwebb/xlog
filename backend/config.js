@@ -13,5 +13,10 @@ module.exports = config({
     type: 'string',
     required: true
   },
+  authDomain: {
+    env: 'XLOG_AUTH0_DOMAIN',
+    type: 'string',
+    required: true
+  }
 });
 
