@@ -1,4 +1,5 @@
-import DataRowList exposing (init, update, view)
+import View exposing (root)
+import DataRowList exposing (init, update)
 import StartApp
 import Task
 import Effects exposing (Never)
@@ -7,7 +8,7 @@ app =
   StartApp.start
     { init = init
     , update = update
-    , view = view
+    , view = View.root
     , inputs = []
     }
 
