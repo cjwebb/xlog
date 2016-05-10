@@ -7,7 +7,16 @@ var uuid = require('node-uuid');
 var moment = require('moment');
 
 module.exports.initializeDatabase = function(callback) {
-  db.run("CREATE TABLE IF NOT EXISTS data (id TEXT, timestamp DATETIME, username TEXT, dataname TEXT, data TEXT)", callback);
+  var sql = [
+    "CREATE TABLE IF NOT EXISTS data (",
+    "id TEXT NOT NULL,",
+    "timestamp DATETIME NOT NULL,",
+    "username TEXT NOT NULL,",
+    "dataname TEXT NOT NULL,",
+    "data TEXT NOT NULL",
+    ")"
+  ].join(' ');
+  db.run(sql, callback);
 };
 
 module.exports.getUserLog = function(username, callback) {
